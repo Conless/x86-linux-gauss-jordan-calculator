@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.22)
+project(x86-linux-gauss-jordan-calculator)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(CMAKE_BUILD_TYPE DEBUG)
+set(SOURCE_LIST src/main.cpp include/fraction.cc)
+add_executable(main ${SOURCE_LIST} ${ALLHEADERS})
