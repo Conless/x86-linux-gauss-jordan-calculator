@@ -9,7 +9,7 @@ inline int gcd(int a, int b) {
         b = a % b;
         a = t;
     }
-    return a;
+    return std::max(a, 1);
 }
 
 inline int get_digit(int a) {
@@ -23,6 +23,10 @@ inline int get_digit(int a) {
 
 void Fraction::Reduce() {
     int sign = 0;
+    if (denominator == 0) {
+        std::cerr << "\nError: the divisor is zero.\n";
+        exit(-1);
+    }
     if (numerator < 0) {
         numerator = -numerator;
         sign ^= 1;
@@ -86,7 +90,7 @@ std::ostream &operator<<(std::ostream &out, const Fraction &x) {
         out << res.numerator;
         output_len = get_digit(res.numerator);
     } else {
-        out << res.numerator << "/" << res.denominator;
+        out << "\\frac{" << res.numerator << "}{" << res.denominator << "}";
         output_len = get_digit(res.numerator) + 1 + get_digit(res.denominator);
     }
     if (res.numerator < 0)
@@ -97,14 +101,20 @@ std::ostream &operator<<(std::ostream &out, const Fraction &x) {
 std::istream &operator>>(std::istream &in, Fraction &x) {
     char s[20];
     in >> s;
-    int pos = -1;
-    for (int i = 0; i < strlen(s); i++)
+    int sgn = 1, pos = -1, len = strlen(s);
+    if (s[0] == '-') {
+        sgn = -1;
+        for (int i = 0; i < len - 1; i++)
+            s[i] = s[i + 1];
+        len--;
+    }
+    for (int i = 0; i < len; i++)
         if (s[i] == '/')
             pos = i;
     if (pos == -1) {
         int num1 = 0;
         int dotflag = 0;
-        for (int i = 0; i < strlen(s); i++) {
+        for (int i = 0; i < len; i++) {
             if (s[i] == '.') {
                 dotflag = i;
                 break;
@@ -115,7 +125,7 @@ std::istream &operator>>(std::istream &in, Fraction &x) {
             x = num1;
         else {
             double num2 = num1, num3 = 1;
-            for (int i = dotflag + 1; i < strlen(s); i++) {
+            for (int i = dotflag + 1; i < len; i++) {
                 num3 /= 10.0;
                 num2 += (double)(s[i] - '0') / num3;
             }
@@ -125,10 +135,12 @@ std::istream &operator>>(std::istream &in, Fraction &x) {
         int num1 = 0, num2 = 0;
         for (int i = 0; i < pos; i++)
             num1 = num1 * 10 + s[i] - '0';
-        for (int i = pos + 1; i < strlen(s); i++)
+        for (int i = pos + 1; i < len; i++)
             num2 = num2 * 10 + s[i] - '0';
         x.numerator = num1;
         x.denominator = num2;
     }
+    if (sgn == -1)
+        x.numerator = -x.numerator;
     return in;
 }

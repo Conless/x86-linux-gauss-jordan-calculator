@@ -22,20 +22,23 @@ Fraction a[100][100];
 
 // Funtions
 void output() {
+    cout << "\\begin{bmatrix}\n";
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
             cout << a[i][j];
-            if (output_len >= 8)
-                cout << "\t";
-            else cout << "\t\t";
+            if (j != n) cout << " & ";
         }
+        if (i != m)
+            cout << "\\\\";
         cout << endl;
     }
+    cout << "\\end{bmatrix}\\Rightarrow\n";
     cout << endl;
 }
 
 // Main function
 int main() {
+    freopen("gauss.ans", "w", stdout);
     fstream fs;
     fs.open("../gauss_jordan.in");
     streambuf *cur_cin = cin.rdbuf();
@@ -48,7 +51,7 @@ int main() {
             cin >> a[i][j];
         }
     }
-    // cin.rdbuf(cur_cin);
+    cin.rdbuf(cur_cin);
     while (true) {
         output();
         char c;
@@ -61,6 +64,10 @@ int main() {
             cin >> r >> c;
             cout << r << " " << c;
             Fraction div = a[r][c] / a[c][c];
+            if (a[c][c] == 0) {
+                std::cerr << "\nThe number on " << c << "," << c << " is zero.\n";
+                exit(-1);
+            }
             for (int j = 1; j <= n; j++)
                 a[r][j] = a[r][j] - div * a[c][j];
         } else if (c == 'P') {
