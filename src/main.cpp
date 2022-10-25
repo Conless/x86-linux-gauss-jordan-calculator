@@ -22,23 +22,23 @@ Fraction a[100][100];
 
 // Funtions
 void output() {
-    cout << "\\begin{bmatrix}\n";
+    // cout << "\\begin{bmatrix}\n";
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
             cout << a[i][j];
-            if (j != n) cout << " & ";
+            if (j != n) cout << " ";
         }
-        if (i != m)
-            cout << "\\\\";
+        // if (i != m)
+        //     cout << "\\\\";
         cout << endl;
     }
-    cout << "\\end{bmatrix}\\Rightarrow\n";
+    // cout << "\\end{bmatrix}\\Rightarrow\n";
     cout << endl;
 }
 
 // Main function
 int main() {
-    freopen("gauss.ans", "w", stdout);
+    // freopen("gauss.ans", "w", stdout);
     fstream fs;
     fs.open("../gauss_jordan.in");
     streambuf *cur_cin = cin.rdbuf();
